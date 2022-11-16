@@ -40,8 +40,8 @@ class RecordWord:
         self.lens = len(self.all_records)
         self.record_order = 0
         self.reply_order = 0
-        self.to_record = random.randint(10, 15)
-        self.to_reply = random.randint(10, 30)
+        self.to_record = random.randint(10, 30)
+        self.to_reply = random.randint(10, 50)
         self.can_record_and_reply = can_record_and_reply
         
     def record_order_increment(self):
@@ -57,7 +57,7 @@ class RecordWord:
         return self.record_order >= self.to_record
     
     def reply(self):
-        self.to_reply = random.randint(10, 20)
+        self.to_reply = random.randint(10, 50)
         self.reply_order = 0
         return self.get_a_word()
 
