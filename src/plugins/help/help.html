@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-image: url("D:\\Downloads\\1253821.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        
+        header {
+            margin-top: 40px;
+            font-size: 50px;
+            margin-left: 900px;
+        }
+        
+        ul {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        li {
+            width: 400px;
+            height: 450px;
+            margin-bottom: 20px;
+            background-color: #00bdbd96;
+            list-style: none;
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+        
+        i {
+            font-size: 34px;
+            color: brown;
+        }
+        
+        .admin {
+            font-size: 25px;
+            font-weight: 500;
+            padding-top: 10px;
+        }
+        
+        .detail {
+            padding-left: 25px;
+        }
+        
+        .name {
+            font-size: 20px;
+            color: crimson;
+            padding-top: 8px;
+        }
+        
+        .usage {
+            padding-top: 5px;
+            padding-left: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <header>功能列表</header>
+        <ul>
+            <li>
+                <i>俄罗斯轮盘</i>
+                <div class="introduction">
+                    <div class="groupadmin">
+                        <div class="admin"><b>管理员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                开启自由轮盘
+                            </div>
+                            <div class="usage">
+                                使当前群聊可以使用俄罗斯轮盘
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <div class="name">
+                                关闭自由轮盘
+                            </div>
+                            <div class="usage">
+                                禁止当前群聊使用俄罗斯轮盘
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="admin"><b>成员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                自由轮盘
+                            </div>
+                            <div class="usage">
+                                开启新一轮的俄罗斯轮盘！！
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <div class="name">
+                                开枪
+                            </div>
+                            <div class="usage">
+                                开枪！！！
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <div class="name">
+                                拨动滚轮/重新装弹
+                            </div>
+                            <div class="usage">
+                                重置子弹的位置。
+                            </div>
+                        </div>
+                    </div>
+            </li>
+            <li>
+                <i>头像表情包</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            头像表情包
+                        </div>
+                        <div class="usage">
+                            查看所有可用的头像表情包
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>文字表情包</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            文字表情包
+                        </div>
+                        <div class="usage">
+                            查看所有可用的文字表情包
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>词云</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            今日词云/我的今日词云
+                        </div>
+                        <div class="usage">
+                            看看今天说了些什么吧，不加“我的”是整个群的，加了就是自己的
+                        </div>
+                        <div class="name">
+                            昨日词云/我的昨日词云
+                        </div>
+                        <div class="usage">
+                            看看昨天说了些什么吧，不加“我的”是整个群的，加了就是自己的
+                        </div>
+                        <div class="name">
+                            本周词云/我的本周词云
+                        </div>
+                        <div class="name">
+                            本月词云/我的本月词云
+                        </div>
+                        <div class="name">
+                            年度词云/年度本月词云
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>撤回</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            @机器人 撤回 [num][-num]
+                        </div>
+                        <div class="usage">
+                            at机器人并让其撤回<br> 麦昆撤回 撤回倒数第一条<br> 麦昆撤回 0-3撤回倒数三条
+                        </div>
+                        <div class="name">
+                            回复要撤回的那条消息“撤回”
+                        </div>
+                        <div class="usage">
+                            撤回特定的一条消息
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>服务器状态查看</i>
+                <div class="introduction">
+                    <div class="groupadmin">
+                        <div class="admin"><b>超级用户指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                状态
+                            </div>
+                            <div class="usage">
+                                查看服务器状态
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>点歌</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            点歌 + 关键词
+                        </div>
+                        <div class="usage">
+                            通过麦昆点一首歌，默认qq音乐<br> 可以使用的其他指令:<br> qq点歌/网易点歌/酷我点歌/酷狗点歌/咪咕点歌/b站点歌
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>疯狂星期四</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            疯狂星期[一|二|三|四|五|六|日|天]
+                        </div>
+                        <div class="usage">
+                            获取疯狂星期四文案！！！！
+                        </div>
+                        <div class="name">
+                            狂乱[月|火|水|木|金|土|日]曜日
+                        </div>
+                        <div class="usage">
+                            获取疯狂星期四文案！！！！但是指令是日文
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>疯狂星期四</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            正则指令！！！使用方法见下
+                        </div>
+                        <div class="usage">
+                            随个人 <br> 随个人帮我打代码 <br>随个人XXX <br>... </div>
+
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>二次元化图片</i>
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            二次元化/动漫化/卡通化 + 图片
+                        </div>
+                        <div class="usage">
+                            二次元化图片！！！
+
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>吃什么</i>
+                <div class="introduction">
+                    <div class="groupadmin">
+                        <div class="admin"><b>管理员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                麦昆加饭 + 名字 + 图片
+                            </div>
+                            <div class="usage">
+                                在麦昆的饭池里加一个，注意每一个加号处都需要空格
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="admin"><b>成员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                麦昆吃什么/麦昆待会吃什么/麦昆今天吃什么
+                            </div>
+                            <div class="usage">
+                                让麦昆帮你决定待会吃啥
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>抽老婆</i>
+                <div class="introduction">
+                    <div class="groupadmin">
+                        <div class="admin"><b>管理员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                增加老婆 + 名字 + [描述] + 图片
+                            </div>
+                            <div class="usage">
+                                在麦昆的老婆池里加一个，其中描述可选<br>
+                                <del>现在是，幻想时间！</del>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="admin"><b>成员指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                抽老婆 + [名字]
+                            </div>
+                            <div class="usage">
+                                给一个人抽老婆，不给名字就是给自己抽<br>
+                                <del>现在是，幻想时间！</del>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>赛博浅草寺抽签</i>
+
+                <div class="group">
+                    <div class="admin"><b>成员指令</b></div>
+                    <div class="detail">
+                        <div class="name">
+                            抽签
+                        </div>
+                        <div class="usage">
+                            给今天的自己抽，只能给自己抽，并且一天只会得到同一个，但是可能每次背景不一样
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <i>抽老婆</i>
+                <div class="introduction">
+                    <div class="groupadmin">
+                        <div class="admin"><b>群主指令</b></div>
+                        <div class="detail">
+                            <div class="name">
+                                开启复读
+                            </div>
+                            <div class="usage">
+                                让麦昆学习你群群友的话，并在随机时刻复述出来，<del>可能非常突兀，</del>该功能在不同群之间数据不共享
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <div class="name">
+                                关闭复读
+                            </div>
+                            <div class="usage">
+                                麦昆不会学习你群群友了
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        </div>
+</body>
+
+</html>
