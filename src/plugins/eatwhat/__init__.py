@@ -9,7 +9,6 @@
 # @export.xxx
 # def some_function():
 #     pass
-from msilib.schema import EventMapping
 from random import random
 from nonebot.log import logger
 import json
@@ -20,8 +19,8 @@ from nonebot.adapters.onebot.v11 import GROUP_ADMIN, GROUP_OWNER, Event, Bot, Me
 from nonebot.params import CommandArg
 from nonebot.rule import to_me
 
-util = Utils(Path(__file__).parent.parent.parent.parent / "data"/ "eatwhat" / "pictures")
-contentpath = Path(Path(__file__).parent.parent.parent.parent / "data"/ "eatwhat" / "content.json")
+util = Utils(Path.absolute(Path(__file__).parent.parent.parent.parent) / "data"/ "eatwhat" / "pictures")
+contentpath = Path.absolute(Path(Path(__file__).parent.parent.parent.parent) / "data"/ "eatwhat" / "content.json")
     
 with open(contentpath, encoding='utf-8') as f:
     content = json.load(f)

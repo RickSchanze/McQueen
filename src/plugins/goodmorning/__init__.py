@@ -24,7 +24,7 @@ _sub_plugins |= nonebot.load_plugins(
     resolve()))
 
 
-work_directory = Path.cwd()
+work_directory = Path.absolute(Path.cwd())
 json_path = work_directory / "data" / "goodmorning"
 json_file = json_path / "config.json"
 
@@ -35,7 +35,7 @@ with open(json_file, 'r', encoding='utf-8') as f:
 @scheduler.scheduled_job("cron", hour=7, minute=30, misfire_grace_time=60)
 async def good_morning():
     bot = get_bot()
-    mor_images_dir = Path.cwd() / "src" / "plugins" / "goodmorning" / "morning"
+    mor_images_dir = Path.absolute(Path.cwd() / "src" / "plugins" / "goodmorning" / "morning")
     mor_images_file = os.listdir(mor_images_dir)
     mor_images_dir_p = str(mor_images_dir).replace('\\', '/')
     for item in config:
@@ -49,7 +49,7 @@ async def good_morning():
 @scheduler.scheduled_job("cron", hour=23, minute=53, misfire_grace_time=60)
 async def good_evening():
     bot = get_bot()
-    env_images_dir = Path.cwd() / "src" / "plugins" / "goodmorning" / "evening"
+    env_images_dir = Path.absolute(Path.cwd() / "src" / "plugins" / "goodmorning" / "evening")
     env_images_file = os.listdir(env_images_dir)
     env_images_dir_p = str(env_images_dir).replace('\\', '/')
     for item in config:

@@ -12,7 +12,7 @@ from nonebot.adapters.onebot.v11 import Bot, Event, Message
 #     pass
 
 help = on_command("帮助", rule=to_me(), aliases={"help", "菜单"})
-help_path = Path.cwd() / "help.png"
+help_path = Path.absolute(Path.cwd()) / "help.png"
 help_path = str(help_path).replace('\\', '/')
 @help.handle()
 async def help_handler(bot: Bot, event:Event):

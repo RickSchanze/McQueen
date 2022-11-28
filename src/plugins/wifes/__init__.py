@@ -18,9 +18,9 @@ from nonebot import on_command, require
 from nonebot.adapters.onebot.v11 import GROUP_ADMIN, GROUP_OWNER, Event, Bot, Message
 from nonebot.params import CommandArg
 
-util = Utils(Path(__file__).parent.parent.parent.parent / "data"/ "wifes" / "pictures")
-jsonpath = Path(Path(__file__).parent.parent.parent.parent / "data"/ "wifes" / "config.json")
-contentpath = Path(Path(__file__).parent.parent.parent.parent / "data"/ "wifes" / "content.json")
+util = Utils(Path.absolute(Path(__file__).parent.parent.parent.parent) / "data"/ "wifes" / "pictures")
+jsonpath = Path(Path.absolute(Path(__file__).parent.parent.parent.parent)) / "data"/ "wifes" / "config.json"
+contentpath = Path.absolute(Path(Path(__file__).parent.parent.parent.parent)) / "data"/ "wifes" / "content.json"
 
 with open(jsonpath, encoding='utf-8') as f:
     config = json.load(f)

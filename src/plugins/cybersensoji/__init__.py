@@ -270,7 +270,7 @@ async def draw_by_lot_handle(bot: Bot, event: Event):
     try:
         async with get_new_page(viewport={"width": 300, "height": 300}) as page:
             await page.goto(
-                "file://" + (str(Path(__file__).parent / "template.html")),
+                "file://" + (str(Path.absolute(Path(__file__).parent) / "template.html")),
                 wait_until="networkidle",
                 )
             

@@ -40,8 +40,8 @@ class RecordWord:
         self.lens = len(self.all_records)
         self.record_order = 0
         self.reply_order = 0
-        self.to_record = random.randint(10, 30)
-        self.to_reply = random.randint(10, 50)
+        self.to_record = random.randint(20, 40)
+        self.to_reply = random.randint(30, 80)
         self.can_record_and_reply = can_record_and_reply
         
     def record_order_increment(self):
@@ -57,17 +57,19 @@ class RecordWord:
         return self.record_order >= self.to_record
     
     def reply(self):
-        self.to_reply = random.randint(10, 50)
+        self.to_reply = random.randint(30, 80)
         self.reply_order = 0
         return self.get_a_word()
 
     def record(self):
         self.lens += 1
-        self.to_record = random.randint(10, 30)
+        self.to_record = random.randint(20, 40)
         self.record_order = 0
     
     def get_a_word(self):
         index = random.randint(1, self.lens - 1)
+        while "reply" in self.all_records[index] or "at" in self.all_records[index]:
+            index = (index + 1) % self.lens
         return self.all_records[index]
     
     def set_can_replay(self, key, can:bool):
@@ -79,7 +81,7 @@ class RecordWord:
         self.all_records.append(message)
 ####################################################################################
 
-work_directory = Path.cwd()
+work_directory = Path.absolute(Path.cwd())
 json_path = work_directory / "data" / "record"
 
 record_path = json_path / "record.json"
