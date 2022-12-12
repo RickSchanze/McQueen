@@ -16,6 +16,8 @@ work_directory = Path.cwd()
 json_path = work_directory / "data" / "cybersensoji"
 json_file = json_path / "config.json"
 pictures_file = json_path / "pictures.json"
+history_file = json_path / "history.json"
+
 if (not json_path.exists()):
     json_path.mkdir()
 json_file.touch(exist_ok=True)
@@ -23,6 +25,9 @@ json_file.touch(exist_ok=True)
 
 with open(json_file, 'r') as f:
     config_ = json.load(f)
+    
+with open(history_file, 'r') as f:
+    history = json.load(f)
 
 
 from nonebot import get_driver
@@ -251,7 +256,7 @@ def order_to_html(order):
         f.write(html)
     
 
-draw_by_lot = on_command("抽签")
+draw_by_lot = on_command("抽签", priority=50)
 @draw_by_lot.handle()
 async def draw_by_lot_handle(bot: Bot, event: Event):
     qq = event.get_user_id()
@@ -267,6 +272,18 @@ async def draw_by_lot_handle(bot: Bot, event: Event):
     with open(json_file, 'w') as f:
         json.dump(config_, f, ensure_ascii=False, indent=4)
     
+    level = message_sign[order][0: message_sign[order].find('\n')]
+    if str(qq) not in [item["qq"] for item in history]:
+        history.append({"qq": str(qq), level: 0})
+    
+    if not is_level_in(level, history[get_qq_in_history(str(qq))]):
+        history[get_qq_in_history(str(qq))][level] = 0
+    
+    history[get_qq_in_history(str(qq))][level] += 1
+    
+    with open(history_file, 'w', encoding='utf-8') as f:
+        json.dump(history, f, ensure_ascii=False, indent=4)
+    
     try:
         async with get_new_page(viewport={"width": 300, "height": 300}) as page:
             await page.goto(
@@ -280,6 +297,15 @@ async def draw_by_lot_handle(bot: Bot, event: Event):
     except Exception as e:
         logger.error(f"抽签失败: {e}")
         
+
+def get_qq_in_history(qq):
+    for index, item in enumerate(history):
+        if item["qq"] == qq:
+            return index
+    return -1
+        
+def is_level_in(level, person):
+    return level in person.keys()
         
 couqian_refresh = on_command("刷新抽签", permission=SUPERUSER)
 @couqian_refresh.handle()
@@ -309,3 +335,17 @@ async def append_url_handler(bot: Bot, event:Event):
         await util.get_and_write(url)
     except Exception as e:
         logger.info(f"增加失败:{e}")
+
+history_reply = on_command("抽签历史", priority=20, block=True)
+@history_reply.handle()
+async def reply(bot: Bot, event: Event):
+    qq = str(event.get_user_id())
+    isin = get_qq_in_history(qq)
+    if isin == -1:
+        await bot.send(event=event, message="您还没有记录哦", at_sender=True)
+        return
+    string = "您的抽签记录为:\n"
+    for key in history[isin].keys():
+        if key != "qq":
+            string += f"{key}: {history[isin][key]}次\n"
+    await bot.send(event=event, message=string, at_sender=True)

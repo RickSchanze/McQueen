@@ -40,8 +40,8 @@ class RecordWord:
         self.lens = len(self.all_records)
         self.record_order = 0
         self.reply_order = 0
-        self.to_record = random.randint(20, 40)
-        self.to_reply = random.randint(30, 80)
+        self.to_record = random.randint(30, 60)
+        self.to_reply = random.randint(50, 80)
         self.can_record_and_reply = can_record_and_reply
         
     def record_order_increment(self):
@@ -57,19 +57,26 @@ class RecordWord:
         return self.record_order >= self.to_record
     
     def reply(self):
-        self.to_reply = random.randint(30, 80)
+        self.to_reply = random.randint(50, 80)
         self.reply_order = 0
         return self.get_a_word()
 
     def record(self):
+        if self.lens > 300:
+            del self.all_records[0: self.lens - 300]
+            self.lens = len(self.all_records)
+            with open(record_path, 'w', encoding='utf-8') as f:
+                json.dump(records, f,ensure_ascii=False, indent=4)
+                    
         self.lens += 1
-        self.to_record = random.randint(20, 40)
+        self.to_record = random.randint(30, 60)
         self.record_order = 0
     
     def get_a_word(self):
         index = random.randint(1, self.lens - 1)
-        while "reply" in self.all_records[index] or "at" in self.all_records[index]:
+        while "reply" in self.all_records[index] or ":at" in self.all_records[index]:
             index = (index + 1) % self.lens
+            print(index)
         return self.all_records[index]
     
     def set_can_replay(self, key, can:bool):
@@ -93,8 +100,8 @@ json_file = None
 with open(record_path, encoding='utf-8') as f:
     records = json.load(f)
 
-change_can_open = on_command("开启复读", permission=GROUP_OWNER, priority=1, block=True)
-change_can_close = on_command("关闭复读", permission=GROUP_OWNER, priority=1, block=True)
+change_can_open = on_command("开启复读", permission=GROUP_OWNER, priority=15, block=True)
+change_can_close = on_command("关闭复读", permission=GROUP_OWNER, priority=15, block=True)
 update = on_message(priority=100)
 
 record_list = {}
