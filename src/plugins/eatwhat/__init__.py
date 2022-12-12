@@ -9,15 +9,14 @@
 # @export.xxx
 # def some_function():
 #     pass
-from random import random
 from nonebot.log import logger
 import json
 from ...utils import Utils
 from pathlib import Path
 from nonebot import on_command, require
 from nonebot.adapters.onebot.v11 import GROUP_ADMIN, GROUP_OWNER, Event, Bot, Message
-from nonebot.params import CommandArg
 from nonebot.rule import to_me
+from nonebot.permission import SUPERUSER
 
 util = Utils(Path.absolute(Path(__file__).parent.parent.parent.parent) / "data"/ "eatwhat" / "pictures")
 contentpath = Path.absolute(Path(Path(__file__).parent.parent.parent.parent) / "data"/ "eatwhat" / "content.json")
@@ -26,7 +25,7 @@ with open(contentpath, encoding='utf-8') as f:
     content = json.load(f)
     
 get_dinner = on_command("待会吃什么", rule=to_me(), aliases={"吃什么", "今天吃什么"})
-append_dinner = on_command("加饭", rule=to_me(), permission=GROUP_ADMIN | GROUP_OWNER)
+append_dinner = on_command("加饭", rule=to_me(), permission=GROUP_ADMIN | GROUP_OWNER | SUPERUSER)
 
 require("nonebot_plugin_apscheduler")
 

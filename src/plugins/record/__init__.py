@@ -1,4 +1,4 @@
-from asyncio.log import logger
+from nonebot.log import logger
 from pathlib import Path
 import random
 from nonebot import get_driver, on_command, on_message
@@ -7,7 +7,6 @@ from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
 import re, json
 
-global_config = get_driver().config
 # Export something for other plugin
 # export = nonebot.export()
 # export.foo = "bar"
@@ -100,8 +99,8 @@ json_file = None
 with open(record_path, encoding='utf-8') as f:
     records = json.load(f)
 
-change_can_open = on_command("开启复读", permission=GROUP_OWNER, priority=15, block=True)
-change_can_close = on_command("关闭复读", permission=GROUP_OWNER, priority=15, block=True)
+change_can_open = on_command("开启复读", permission=GROUP_OWNER | SUPERUSER, priority=15, block=True)
+change_can_close = on_command("关闭复读", permission=GROUP_OWNER | SUPERUSER, priority=15, block=True)
 update = on_message(priority=100)
 
 record_list = {}

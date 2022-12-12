@@ -17,6 +17,7 @@ from pathlib import Path
 from nonebot import on_command, require
 from nonebot.adapters.onebot.v11 import GROUP_ADMIN, GROUP_OWNER, Event, Bot, Message
 from nonebot.params import CommandArg
+from nonebot.permission import SUPERUSER
 
 util = Utils(Path.absolute(Path(__file__).parent.parent.parent.parent) / "data"/ "wifes" / "pictures")
 jsonpath = Path(Path.absolute(Path(__file__).parent.parent.parent.parent)) / "data"/ "wifes" / "config.json"
@@ -29,7 +30,7 @@ with open(contentpath, encoding='utf-8') as f:
     content = json.load(f)
     
 get_wife = on_command("抽老婆")
-append_wife = on_command("增加老婆", permission=GROUP_ADMIN | GROUP_OWNER)
+append_wife = on_command("增加老婆", permission=GROUP_ADMIN | GROUP_OWNER | SUPERUSER)
 
 require("nonebot_plugin_apscheduler")
 from nonebot_plugin_apscheduler import scheduler
