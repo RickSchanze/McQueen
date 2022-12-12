@@ -13,7 +13,7 @@ nonebot2 = "^2.0.0-beta.1"
 nb-cli = "^0.6.0"
 
 [tool.nonebot]
-# plugins = ["nonebot_plugin_apscheduler", "nonebot_plugin_htmlrender", "nonebot_plugin_russian_ban", "nonebot_plugin_memes", "nonebot_plugin_wordcloud", "nonebot_plugin_petpet", "nonebot_plugin_repeater", "nonebot_plugin_withdraw", "nonebot_plugin_crazy_thursday", "nonebot_plugin_simplemusic", "nonebot-plugin-person", "nonebot_plugin_cartoon", "nonebot_plugin_status", "nonebot_plugin_chatgpt"]
+plugins = ["nonebot_plugin_apscheduler", "nonebot_plugin_htmlrender", "nonebot_plugin_russian_ban", "nonebot_plugin_memes", "nonebot_plugin_wordcloud", "nonebot_plugin_petpet", "nonebot_plugin_repeater", "nonebot_plugin_withdraw", "nonebot_plugin_crazy_thursday", "nonebot_plugin_simplemusic", "nonebot-plugin-person", "nonebot_plugin_cartoon", "nonebot_plugin_status", "nonebot_plugin_chatgpt"]
 plugin_dirs = ["src/plugins"]
 
 [build-system]
