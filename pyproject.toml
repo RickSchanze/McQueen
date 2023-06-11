@@ -1,0 +1,15 @@
+[project]
+name = "McQueen"
+version = "0.1.0"
+description = "McQueen"
+readme = "README.md"
+requires-python = ">=3.8, <4.0"
+
+[tool.nonebot]
+adapters = [
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
+    { name = "Console", module_name = "nonebot.adapters.console" }
+]
+plugins = ["nonebot-plugin-csgo-case-simulator", "nonebot_plugin_picstatus", "nonebot_plugin_gocqhttp"]
+plugin_dirs = ["src/plugins"]
+builtin_plugins = []
