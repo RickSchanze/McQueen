@@ -22,6 +22,7 @@ async def get_all_json():
     crates.souvenirs = res[1]
     skins.skins = res[2]
 
+
 asyncio.run(get_all_json())
 
 crate_opening = on_command("open", priority=5)
@@ -47,10 +48,9 @@ async def handle_list_souvenir():
         svs_list_str += f"{sv}\n"
     await list_souvenir.send(f"{svs_list_str}")
     svs_list_str = ""
-    for sv in svs_list[len(svs_list)//2:]:
+    for sv in svs_list[len(svs_list) // 2:]:
         svs_list_str += f"{sv}\n"
     await list_souvenir.finish(f"{svs_list_str}")
-
 
 
 @crate_opening.handle()
@@ -62,7 +62,7 @@ async def handle_open_crate(event: MessageEvent, args: Message = CommandArg()):
             if not crate["contains"]:
                 await crate_opening.finish("箱子里面是空的")
             img_base64 = await utils.img_from_url(crate["image"])
-            await crate_opening.send(MessageSegment.image(img_base64)+f"正在开启{amount}个{crate['name']}...")
+            await crate_opening.send(MessageSegment.image(img_base64) + f"正在开启{amount}个{crate['name']}...")
             items = crates.open_crate_multiple(
                 crate, amount
             )
@@ -86,7 +86,7 @@ async def handle_search_skin(args: Message = CommandArg()):
             await search_skin.finish("没找到捏")
         for skin in found_skin_list:
             img_base64 = await utils.img_from_url(skin["image"])
-            await search_skin.send(MessageSegment.image(img_base64)+f"找到饰品{skin['name']}")
+            await search_skin.send(MessageSegment.image(img_base64) + f"找到饰品{skin['name']}")
     else:
         await search_skin.finish("请输入皮肤名称")
 

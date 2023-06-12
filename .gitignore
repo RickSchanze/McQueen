@@ -30,6 +30,7 @@ share/python-wheels/
 *.egg-info/
 accounts
 data
+config
 .installed.cfg
 *.egg
 MANIFEST
