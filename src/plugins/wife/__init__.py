@@ -20,6 +20,7 @@ remove_wife = on_command("删除老婆")
 show_wife = on_command("查看老婆")
 roll_wife = on_command("抽老婆")
 
+
 # TODO: 风控解除了记得测试
 
 @add_wife.handle()
@@ -89,7 +90,9 @@ async def show_wife_handle(event: MessageEvent):
         wife_name = match.group(1)
         wife = wife_manager.get_wife_by_name(wife_name)
         if wife is not None:
-            msg = str(MessageSegment.text(f"老婆:{wife_name}\n描述:{wife.description}\n作者:{wife.author_nickname}") + MessageSegment.image(Path(wife.filename)))
+            msg = str(MessageSegment.text(
+                f"老婆:{wife_name}\n描述:{wife.description}\n作者:{wife.author_nickname}") + MessageSegment.image(
+                Path(wife.filename)))
             print(msg)
             await show_wife.finish(message=msg)
         else:

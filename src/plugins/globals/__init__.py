@@ -83,6 +83,16 @@ async def download_picture(url: str, path: Path) -> bool:
             return False
 
 
+def replace_cqimage_with_path(msg: str, url: str, path: Path) -> str:
+    """
+    将CQ:Image消息中的url替换为path
+    @param url:
+    @param path:
+    @return:
+    """
+    return msg.replace(msg, str(path))
+
+
 class JsonEncoder(json.JSONEncoder):
     def default(self, o):
         d = o.__dict__.copy()
