@@ -6,7 +6,6 @@ from nonebot.log import logger
 from .Wife import Wife
 from .wifeconfig import WifeConfig
 from src.plugins.globals import create_file, create_folder, work_path, JsonEncoder, download_picture
-from nonebot.adapters.onebot.v11 import MessageSegment
 
 
 class WifeManager:

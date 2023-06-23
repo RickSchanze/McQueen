@@ -1,11 +1,12 @@
 import json
 import random
-from typing import List, Callable
+from pathlib import Path
+from typing import List, Callable, Optional
 from nonebot.log import logger
-from nonebot.adapters.onebot.v11 import GroupMessageEvent, Bot
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, Bot, MessageSegment, Message
 from .config import Config
 from src.plugins.globals import create_file, create_folder, data_path, JsonEncoder, extract_picture_from_cqmessage, \
-    download_picture
+    download_picture, replace_cqimage_with_path, extract_whole_picture
 
 
 class Record:
@@ -43,7 +44,9 @@ class RecordManager:
         self.picture_path = create_folder(self.data_path, "picture")
         self.content_file = create_file(self.data_path, "content.json")
         self.content = self.load()
+        self.max_record_count = self.record_config.repeat_max_record_count
         self.verify_func: List[Callable[[GroupMessageEvent], bool]] = []
+        self.last_reply: Optional[Record] = None
 
     async def process(self, event: GroupMessageEvent, bot: Bot):
         if not isinstance(event, GroupMessageEvent):
@@ -54,14 +57,56 @@ class RecordManager:
 
         self.__record_now_count += 1
         self.__reply_now_count += 1
-        # TODO: 完成处理函数，先完成globals里的东西
+
+        gr = self.get_group_record(event.group_id)
+        if not gr.allow:
+            return
+        # 该记录一条数据了
         if self.__record_now_count >= self.__record_need_count:
-            gr = self.get_group_record(event.group_id)
+            # 这个是要增加的记录
             url = extract_picture_from_cqmessage(event.raw_message)
             if url is None:
-                gr.content.append(Record(event.sender.user_id, event.sender.nickname, event.raw_message))
+                r = Record(event.sender.user_id, event.sender.nickname, event.raw_message)
+                gr.content.append(r)
+                logger.info(f"增加记录: {r}")
             else:
-                await download_picture(url, self.picture_path / f"{event.sender.nickname}_{event.message_id}")
+                pic_path = self.picture_path / f"{event.message_id}"
+                await download_picture(url, pic_path)
+                msg = replace_cqimage_with_path(event.raw_message, url, pic_path)
+                r = Record(event.sender.user_id, event.sender.nickname, msg)
+                gr.content.append(r)
+                logger.info(f"增加记录: {r}")
+            # 加了之后看看有没有超出限制
+            if len(gr.content) > self.max_record_count:
+                r = gr.content.pop(0)
+                file_path = extract_picture_from_cqmessage(r.content)
+                if file_path is not None:
+                    Path(file_path).unlink()
+            self.save()
+            self.__record_now_count = 0
+            self.__record_need_count = random.randint(self.__record_random_min, self.__record_random_max)
+
+        # 该回复一条信息了
+        if self.__reply_now_count >= self.__reply_need_count:
+            if len(gr.content) == 0:
+                return
+            record = random.choice(gr.content)
+            msg = self.create_message(record)
+            await bot.send(event, Message(msg))
+            self.last_reply = record
+            self.__reply_now_count = 0
+            self.__reply_need_count = random.randint(self.__reply_random_min, self.__reply_random_max)
+
+    def create_message(self, r: Record) -> str:
+        file_path = extract_picture_from_cqmessage(r.content)
+        if file_path is not None:
+            # 说明有图片消息
+            pic_whole = extract_whole_picture(r.content)
+            msg = r.content.replace(pic_whole, "{}")
+            msg = msg.format(MessageSegment.image(Path(file_path)))
+            return msg
+        else:
+            return r.content
 
     def load(self) -> List[GroupRecord]:
         try:
@@ -89,4 +134,16 @@ class RecordManager:
         for group in self.content:
             if group.group_id == group_id:
                 return group
-        return GroupRecord(group_id, [], False)
+        gr = GroupRecord(group_id, [], False)
+        self.content.append(gr)
+        return gr
+
+    def allow_group(self, group_id: int):
+        gr = self.get_group_record(group_id)
+        gr.allow = True
+        self.save()
+
+    def disallow_group(self, group_id: int):
+        gr = self.get_group_record(group_id)
+        gr.allow = False
+        self.save()

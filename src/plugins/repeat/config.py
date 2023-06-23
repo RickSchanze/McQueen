@@ -7,5 +7,5 @@ class Config(BaseModel, extra=Extra.ignore):
     repeat_record_random_max: int = 80
     repeat_reply_random_min: int = 50
     repeat_reply_random_max: int = 80
-
+    repeat_max_record_count: int = 300
 
