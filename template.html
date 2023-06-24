@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .container {
+      display: flex;
+      width: 620px;
+      flex-direction: column;
+      background: linear-gradient(to right, #BB73DF, #FF8DDB);
+      border-radius: 10px;
+    }
+
+    .title {
+      width: 620px;
+      font-size: 30px;
+      background: linear-gradient(to right, #BB73DF, #FF8DDB);
+      text-align: center;
+      height: 40px;
+      border-radius: 10px;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: linear-gradient(to right, #0DCDA4C7, #C2FCD4C7);
+      width: 590px;
+      border-radius: 20px;
+      margin-top: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 3px;
+      margin: 0;
+      background: #f0f0f06b;
+      line-height: 20px;
+      /* 行距 */
+      width: 583px;
+      overflow: auto;
+      /* 超出宽度出现滑动条 */
+      overflow-Y: hidden;
+      /* 作用是隐藏IE的右侧滑动条 */
+      border-radius: 10px;
+      font-family: 'Microsoft Yahei';
+    }
+
+    .content .name {
+      font-size: 30px;
+      font-weight: bold;
+      color: blueviolet;
+    }
+
+    .content .description {
+      font-style: italic;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="title">帮助</div>
+    <div class="content">
+      <div class="name">词云</div>
+      <div class="description">利用群消息生成词云</div>
+      <pre class="usage">获取今天的词云
+/今日词云
+获取昨天的词云
+/昨日词云
+获取本周词云
+/本周词云
+获取本月词云
+/上周词云
+获取上周词云
+/本月词云
+获取年度词云
+/上月词云
+获取上月词云
+/年度词云
+
+历史词云(支持 ISO8601 格式的日期与时间，如 2022-02-22T22:22:22)
+获取某日的词云
+/历史词云 2022-01-01
+获取指定时间段的词云
+/历史词云
+/历史词云 2022-01-01~2022-02-22
+/历史词云 2022-02-22T11:11:11~2022-02-22T22:22:22
+
+如果想要获取自己的发言，可在命令前添加 我的
+/我的今日词云
+
+自定义词云形状
+/设置词云形状
+/删除词云形状
+仅超级用户可设置默认词云形状
+/设置词云默认形状
+/删除词云默认形状
+
+设置定时发送每日词云
+/词云每日定时发送状态
+/开启词云每日定时发送
+/开启词云每日定时发送 23:59
+/关闭词云每日定时发送</pre>
+    </div>
+    <div class="content">
+      <div class="name">PicStatus</div>
+      <div class="description">以图片形式显示当前设备的运行状态</div>
+      <pre class="usage">指令：运行状态 / 状态 / yxzt / zt / status
+注意：仅SuperUser可以使用此指令</pre>
+    </div>
+    <div class="content">
+      <div class="name">抽老婆</div>
+      <div class="description">每日一抽，开启一天好心情!</div>
+      <pre class="usage">
+基本命令：
+  抽老婆 [<抽取者名称>]   
+    若抽取者名称为空，则默认为发送者昵称，每个名字每天抽取到内容一致
+管理员命令:
+  增加老婆 <名称> <图片> [<描述>]
+    想老婆池里增加一个老婆，此命令可能在电脑端失效
+  删除老婆 <名称>
+    从老婆池里删除一个老婆
+  查看老婆 <名称|索引>
+    查看老婆池里的老婆，可以通过名字或者下标查看
+</pre>
+    </div>
+  </div>
+</body>
+
+</html>
