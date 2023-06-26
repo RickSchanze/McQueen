@@ -1,6 +1,8 @@
 from nonebot import get_driver
+from nonebot.plugin import PluginMetadata
+
 from .classdef import SensojiManager
-from src.plugins.globals import data_path, PERMISSION_ADMIN
+from src.plugins.globals import data_path, PERMISSION_ADMIN, PERMISSION_SUPERUSER
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 from nonebot import require
@@ -14,7 +16,24 @@ sensoji_manager = SensojiManager(data_path)
 
 get_sensoji = on_command("抽签")
 sensoji_history = on_command("抽签历史")
-refresh = on_command("刷新抽签", permission=PERMISSION_ADMIN)
+refresh = on_command("刷新抽签", permission=PERMISSION_SUPERUSER)
+
+__usage__ = r"""
+普通命令:
+  抽签
+    抽一发，每个人每天抽到的都是一样的
+  抽签历史
+    查看自己的抽签历史
+管理员命令:
+  刷新抽签
+    刷新今日所有的抽签记录，需要超级用户权限
+"""
+
+__plugin_meta__ = PluginMetadata(
+    name="抽签",
+    description="赛博浅草寺抽签！",
+    usage=__usage__
+)
 
 
 @get_sensoji.handle()

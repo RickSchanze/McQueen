@@ -5,6 +5,7 @@ from typing import Optional
 import httpx
 
 from nonebot import get_driver
+from nonebot.plugin import PluginMetadata
 
 from .config import Config
 from pathlib import Path
@@ -20,6 +21,22 @@ config_path = Path.cwd() / config.config_path
 work_path = Path.cwd()
 
 PERMISSION_ADMIN = SUPERUSER | GROUP_ADMIN | GROUP_OWNER
+PERMISSION_SUPERUSER = SUPERUSER
+
+__usage__ = r"""
+指令	                权限	    需要@	   范围	    说明
+open [数量] [名称]	群员	    否	       群聊	开启武器箱
+cases	            群员	    否	       群聊	查看所有武器箱
+svs	                群员	    否	       群聊	查看所有纪念包
+s_skins	            群员	    否	       群聊	搜索皮肤
+效果图
+"""
+
+__plugin_meta__ = PluginMetadata(
+    name="csgo开箱模拟器",
+    description="无成本体验csgo的开箱!",
+    usage=__usage__
+)
 
 
 def create_folder(prefix: Path, folder: Optional[str] = None) -> Optional[Path]:

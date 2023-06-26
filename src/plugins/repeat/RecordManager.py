@@ -1,7 +1,7 @@
 import json
 import random
 from pathlib import Path
-from typing import List, Callable, Optional
+from typing import List, Callable, Dict
 from nonebot.log import logger
 from nonebot.adapters.onebot.v11 import GroupMessageEvent, Bot, MessageSegment, Message
 from .config import Config
@@ -36,33 +36,35 @@ class RecordManager:
         self.__reply_random_max = self.record_config.repeat_reply_random_max
         self.__record_random_min = self.record_config.repeat_record_random_min
         self.__record_random_max = self.record_config.repeat_record_random_max
-        self.__reply_need_count = random.randint(self.__reply_random_min, self.__reply_random_max)
-        self.__record_need_count = random.randint(self.__record_random_min, self.__record_random_max)
-        self.__reply_now_count = 0
-        self.__record_now_count = 0
+        self.__reply_need_count: Dict[int, int] = {}
+        self.__record_need_count: Dict[int, int] = {}
+        self.__reply_now_count: Dict[int, int] = {}
+        self.__record_now_count: Dict[int, int] = {}
         self.data_path = create_folder(data_path, "repeat")
         self.picture_path = create_folder(self.data_path, "picture")
         self.content_file = create_file(self.data_path, "content.json")
         self.content = self.load()
         self.max_record_count = self.record_config.repeat_max_record_count
         self.verify_func: List[Callable[[GroupMessageEvent], bool]] = []
-        self.last_reply: Optional[Record] = None
+        self.last_reply: Dict[int, Record] = {}
 
     async def process(self, event: GroupMessageEvent, bot: Bot):
+        if not self.get_group_record(event.group_id).allow:
+            return
         if not isinstance(event, GroupMessageEvent):
             return
         for func in self.verify_func:
             if func(event):
                 return
 
-        self.__record_now_count += 1
-        self.__reply_now_count += 1
+        self.__record_now_count[event.group_id] += 1
+        self.__reply_now_count[event.group_id] += 1
 
         gr = self.get_group_record(event.group_id)
         if not gr.allow:
             return
         # 该记录一条数据了
-        if self.__record_now_count >= self.__record_need_count:
+        if self.__record_now_count[event.group_id] >= self.__record_need_count[event.group_id]:
             # 这个是要增加的记录
             url = extract_picture_from_cqmessage(event.raw_message)
             if url is None:
@@ -83,19 +85,20 @@ class RecordManager:
                 if file_path is not None:
                     Path(file_path).unlink()
             self.save()
-            self.__record_now_count = 0
-            self.__record_need_count = random.randint(self.__record_random_min, self.__record_random_max)
+            self.__record_now_count[event.group_id] = 0
+            self.__record_need_count[event.group_id] = random.randint(self.__record_random_min,
+                                                                      self.__record_random_max)
 
         # 该回复一条信息了
-        if self.__reply_now_count >= self.__reply_need_count:
+        if self.__reply_now_count[event.group_id] >= self.__reply_need_count[event.group_id]:
             if len(gr.content) == 0:
                 return
             record = random.choice(gr.content)
             msg = self.create_message(record)
             await bot.send(event, Message(msg))
-            self.last_reply = record
-            self.__reply_now_count = 0
-            self.__reply_need_count = random.randint(self.__reply_random_min, self.__reply_random_max)
+            self.last_reply[event.group_id] = record
+            self.__reply_now_count[event.group_id] = 0
+            self.__reply_need_count[event.group_id] = random.randint(self.__reply_random_min, self.__reply_random_max)
 
     def create_message(self, r: Record) -> str:
         file_path = extract_picture_from_cqmessage(r.content)
@@ -118,6 +121,7 @@ class RecordManager:
                     for record in group["content"]:
                         gr.content.append(Record(record["sender_qq"], record["sender_nickname"], record["content"]))
                     rtn.append(gr)
+                    self.init_group_record(gr.group_id)
                 return rtn
         except Exception as e:
             logger.warning(f"加载失败，使用新建配置:{e}")
@@ -141,9 +145,16 @@ class RecordManager:
     def allow_group(self, group_id: int):
         gr = self.get_group_record(group_id)
         gr.allow = True
+        self.init_group_record(group_id)
         self.save()
 
     def disallow_group(self, group_id: int):
         gr = self.get_group_record(group_id)
         gr.allow = False
         self.save()
+
+    def init_group_record(self, group_id: int):
+        self.__record_now_count[group_id] = 0
+        self.__record_need_count[group_id] = random.randint(self.__record_random_min, self.__record_random_max)
+        self.__reply_now_count[group_id] = 0
+        self.__reply_need_count[group_id] = random.randint(self.__reply_random_min, self.__reply_random_max)

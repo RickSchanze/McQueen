@@ -1,6 +1,7 @@
 from nonebot import get_driver, on_command
 from nonebot.message import event_postprocessor
 from nonebot.adapters.onebot.v11 import Bot, Event, GroupMessageEvent, Message
+from nonebot.plugin import PluginMetadata
 from nonebot.rule import to_me
 from .config import Config
 from .RecordManager import RecordManager
@@ -13,6 +14,22 @@ record_manager = RecordManager(config)
 enable_record = on_command("开启复读", permission=PERMISSION_ADMIN, block=True, rule=to_me())
 disable_record = on_command("关闭复读", permission=PERMISSION_ADMIN, block=True, rule=to_me())
 last_reply = on_command("上一条", aliases={"上一句"}, permission=PERMISSION_ADMIN, block=True, rule=to_me())
+
+__usage__ = r"""
+管理员命令:
+  开启复读
+    开启此功能，需要at我
+  关闭复读
+    关闭此功能，需要at我
+  上一条
+    查看上一条发送的消息是谁发送的，需要at我
+"""
+
+__plugin_meta__ = PluginMetadata(
+    name="自动复读",
+    description="笨拙的复读",
+    usage=__usage__
+)
 
 
 @record_manager.register_verify_func
@@ -77,9 +94,9 @@ async def disable_record_handle(event: Event):
 async def last_reply_handle(event: Event):
     if not isinstance(event, GroupMessageEvent):
         return
-    if record_manager.last_reply is None:
+    if event.group_id not in record_manager.last_reply.keys():
         await last_reply.finish("没有记录")
     else:
-        msg = record_manager.create_message(record_manager.last_reply)
+        msg = record_manager.create_message(record_manager.last_reply[event.group_id])
         await last_reply.finish(
-            Message(f"上一次复读的内容是：\n{msg}\n是{record_manager.last_reply.sender_nickname}说的"))
+            Message(f"上一次复读的内容是：\n{msg}\n是{record_manager.last_reply[event.group_id].sender_nickname}说的"))

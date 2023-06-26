@@ -1,17 +1,29 @@
 from nonebot import get_driver, get_loaded_plugins, on_command
+from nonebot.adapters.onebot.v11 import MessageSegment
 from nonebot.rule import to_me
 from .config import Config
+from pathlib import Path
+from nonebot import require
+
+require("nonebot_plugin_htmlrender")
+
+from nonebot_plugin_htmlrender import get_new_page
 
 global_config = get_driver().config
 config = Config.parse_obj(global_config)
 
 get_help = on_command("help", aliases={"帮助"}, rule=to_me())
 
+dir_path = Path(__file__).parent
 
-# TODO:生成图片后发送
+
 @get_help.handle()
 async def get_help_handler():
     gen_html_str()
+    async with get_new_page(viewport={"width": 650, "height": 120}) as page:
+        await page.goto("file:///" + str(dir_path / "template.html"), wait_until="networkidle")
+        pic = await page.screenshot(full_page=True, path=str(dir_path / "help.png"))
+    await get_help.finish(message=MessageSegment.image(pic), at_sender=True)
 
 
 def gen_html_str() -> str:
@@ -28,8 +40,6 @@ def gen_html_str() -> str:
             usage = plugin.metadata.usage
             description = plugin.metadata.description
             str_insert += str_inner.format(name, description, usage)
-
-    print(str_insert)
     str_html = f"""
     <!DOCTYPE html>
 <html lang="en">
@@ -103,6 +113,6 @@ def gen_html_str() -> str:
 </body>
 </html>
     """
-    with open('./template.html', 'w', encoding='utf-8') as f:
+    with (dir_path / "template.html").open('w', encoding='utf-8') as f:
         f.write(str_html)
     return str_html

@@ -125,3 +125,7 @@ class WifeManager:
             print(wife_path)
             return wife_path
         return None
+
+    def clear_and_save_roll_data(self):
+        self.roll_data = {}
+        self.save_roll()

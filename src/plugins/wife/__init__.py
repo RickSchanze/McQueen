@@ -1,12 +1,14 @@
 import re
 
-from nonebot import get_driver, on_command
+from nonebot import get_driver, on_command, require
 
+require("nonebot_plugin_apscheduler")
+from nonebot_plugin_apscheduler import scheduler
 from .Wife import Wife
 from .wifeconfig import WifeConfig
 from .WifeManager import WifeManager
 from nonebot.log import logger
-from nonebot.adapters.onebot.v11 import MessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import MessageEvent, MessageSegment, Message
 from src.plugins.globals import extract_picture_from_cqmessage
 from pathlib import Path
 from nonebot.plugin import PluginMetadata
@@ -20,7 +22,7 @@ add_wife = on_command("增加老婆")
 remove_wife = on_command("删除老婆")
 show_wife = on_command("查看老婆")
 roll_wife = on_command("抽老婆")
-
+refresh = on_command("刷新抽老婆")
 
 __usage__ = r"""
 基本命令：
@@ -33,6 +35,9 @@ __usage__ = r"""
     从老婆池里删除一个老婆
   查看老婆 <名称|索引>
     查看老婆池里的老婆，可以通过名字或者下标查看
+SUPERUSER命令:
+  刷新抽老婆
+    刷洗当日所有群聊的抽老婆数据
 """
 
 __plugin_meta__ = PluginMetadata(
@@ -132,4 +137,15 @@ async def roll_wife_handle(event: MessageEvent):
         roller_name = event.sender.nickname if match.group(1) == "" else match.group(1)
         wife, path = wife_manager.roll_wife(roller_name)
         msg = str(MessageSegment.text(f"{roller_name}抽到了{wife.name}") + MessageSegment.image(Path(wife.filename)))
-        await roll_wife.finish(message=msg, at_sender=True)
+        await roll_wife.finish(message=Message(msg), at_sender=True)
+
+
+@refresh.handle()
+async def refresh_handler():
+    wife_manager.clear_and_save_roll_data()
+    await refresh.finish("刷新成功", at_sender=True)
+
+
+@scheduler.scheduled_job("cron", hour=0, minute=0, second=0)
+async def clear_roll():
+    wife_manager.clear_and_save_roll_data()
