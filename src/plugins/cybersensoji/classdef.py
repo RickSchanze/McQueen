@@ -34,7 +34,7 @@ class SensojiManager:
         qq = str(event.get_user_id())
         if qq in self.config.keys():
             self.generate_picture(int(self.config[qq]))
-            return MessageSegment.text("您今天已经抽过前了！抽签结果如下：") + await self.get_message_use_html()
+            return MessageSegment.text("您今天已经抽过签了！抽签结果如下：") + await self.get_message_use_html()
         idx = random.randint(0, len(self.all_sensojis) - 1)
         self.generate_picture(idx)
         content = self.all_sensojis[idx]

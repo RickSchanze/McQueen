@@ -118,9 +118,9 @@ async def show_wife_handle(event: MessageEvent):
             wife = wife_manager.get_wife_by_name(wife_name)
         if wife is not None:
             msg = str(MessageSegment.text(
-                f"老婆:{wife_name}\n描述:{wife.description}\n作者:{wife.author_nickname}") + MessageSegment.image(
+                f"老婆:{wife.name}\n描述:{wife.description}\n作者:{wife.author_nickname}") + MessageSegment.image(
                 Path(wife.filename)))
-            await show_wife.finish(message=msg)
+            await show_wife.finish(message=Message(msg))
         else:
             await show_wife.finish(f"查看老婆失败,不存在老婆:{wife_name}")
     else:
