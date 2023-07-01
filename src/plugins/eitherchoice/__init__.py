@@ -5,7 +5,7 @@ from nonebot.internal.matcher import Matcher
 from nonebot.plugin import PluginMetadata
 from nonebot.rule import to_me
 from .config import Config
-from nonebot.adapters.onebot.v11 import MessageSegment, GroupMessageEvent
+from nonebot.adapters.onebot.v11 import MessageSegment, GroupMessageEvent, MessageEvent, Bot
 from pathlib import Path
 
 require("nonebot_plugin_htmlrender")
@@ -45,14 +45,15 @@ url = "https://eitherchoice.com/api/prompt/ask"
 
 
 @either_choice.handle()
-async def handle_first_receive(bot, event):
-    if event is not GroupMessageEvent:
+async def handle_first_receive(bot: Bot, event: GroupMessageEvent):
+    if not isinstance(event, GroupMessageEvent):
         return
     global last_timer
     if event.group_id not in last_timer.keys():
         last_timer[event.group_id] = int(time.time())
     now_time = time.time()
     gap = int(now_time - last_timer[event.group_id])
+    print(gap)
     if gap < gap_time:
         return
     last_timer[event.group_id] = int(now_time)
